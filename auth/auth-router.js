@@ -21,7 +21,7 @@ router.post('/register', validateUser, (req, res) => {
 
     const token = createToken(user)
 
-    res.status(201).json({token})
+    res.status(201).json({token});
 
   })
 
@@ -35,6 +35,28 @@ router.post('/register', validateUser, (req, res) => {
 
 router.post('/login', (req, res) => {
   // implement login
+
+  const {username, password} = req.body;
+
+  model.findBy({username})
+  .first()
+  .then(user => {
+    if (user && bcrypt.compareSync(password, user.password)) {
+
+      const token = createToken(user);
+
+      res.status(200).json({token});
+
+    } else {
+
+      res.status(401).json({message: 'invalid username and or pwd'})
+    }
+  })
+
+  .catch(err => {
+
+    res.status(500).json({err: 'server err'})
+  })
 
 
 });

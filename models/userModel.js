@@ -4,8 +4,19 @@ const db = require('../database/dbConfig.js');
 module.exports = {
 
     findById,
-    insert
+    insert,
+    findBy
 }
+
+
+
+function findBy(filter) {
+
+    return db('users')
+    .where(filter)
+}
+
+
 
 
 function findById(id) {
@@ -24,7 +35,7 @@ function insert(user) {
 
     .insert(user)
     .then(ids => {
-        
+
         const [id] = ids;
 
         return findById(id)
